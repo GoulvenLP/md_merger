@@ -1,0 +1,70 @@
+# !/bin/bash
+#
+# md_merger merges all .md files into a single .md file
+# Call the function through an alias
+# md_merger [PATH] [DESTINATION FILE NAME]
+# The destination file name is optional and will be set to "merged.md" if not filled.
+# At the end of the operation, a message confirms the success of the merge process and the number
+# of files appended in the destination file
+
+
+
+usage(){
+	echo "Usage ./md_merger [TARGET PATH] [DESTINATION FILE]"
+	echo "if no destination file is specified, the output file will be 'merged.md' "
+}
+
+
+optionParameter(){
+	if [ "$1" == "-h" ]; then
+		usage
+	fi
+}
+
+
+main() {
+	path=$1
+	dest=$2
+	# argument count: at least 1, maximum 2
+	if [ "$#" -lt 1 ]; then
+		usage
+		exit 2
+	elif [ "$#" -gt 2 ]; then
+		usage
+	fi
+	
+	# wrong argument
+	if [ ! -d "$path" ]; then
+		echo "${path} is not a directory"
+		exit 1
+	fi
+	
+	optionParameter $1
+	# assign a default destination file if there it none assigned
+	if [ -z "$dest" ]; then
+		dest="merged.md"
+	fi
+
+	# create the destination file
+	touch ${dest}
+	numberOfFiles=0
+	# append all files into the destination file
+	files=($(ls ${path} | sort -n))
+	for file in ${files[@]}; do
+		# only append .md files
+		extension=$(echo "${file}" | tail -c 4)
+		if [ "${extension}" == ".md" ]; then
+			if [ "${file}" != "${dest}" ]; then #exclude the target file
+				cat ${file} >> ${dest}
+				echo " ">> ${dest} #force a linebreak to avoid troubles 
+				((numberOfFiles+=1))
+			fi
+		fi
+	done
+	echo "${numberOfFiles} files merged in the file ${dest}"
+
+	exit 0
+}
+
+#------------------------------------------------
+main $1 $2
