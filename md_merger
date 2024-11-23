@@ -12,15 +12,8 @@
 usage(){
 	echo "Usage ./md_merger [TARGET PATH] [DESTINATION FILE]"
 	echo ""
-	echo "-h		help: displays the typical usage of the application"
+	echo "-h			help: displays the typical usage of the application"
 	echo "DESTINATION FILE	optional. If not specified, the output file will be named 'merged.md' "
-}
-
-
-optionParameter(){
-	if [ "$1" == "-h" ]; then
-		usage
-	fi
 }
 
 
@@ -36,12 +29,15 @@ main() {
 	fi
 	
 	# wrong argument
+	if [ "${1}" == "-h" ]; then
+		usage
+		exit 3
+	fi
 	if [ ! -d "$path" ]; then
 		echo "${path} is not a directory"
 		exit 1
 	fi
 	
-	optionParameter $1
 	# assign a default destination file if there it none assigned
 	if [ -z "$dest" ]; then
 		dest="merged.md"
@@ -67,7 +63,7 @@ main() {
 	if [ "$numberOfFiles" == "0" ]; then
 		echo "There is no .md file in this directory"
 		rm ${dest} # remove the empty destination file
-		exit 3
+		exit 4
 	else
 		echo "${numberOfFiles} files merged in the file ${dest}"
 	fi
