@@ -35,6 +35,19 @@ md_merger [PATH TO DIRECTORY] [DESTINATION FILE NAME]
 If you are already in the targetted directory, use `../directoryName` (replacing *directoryName* by your directory's name).
 - Name the destination file you want to have. This parameter is optional. If this field is not filled, the destination file will be *"merged.md"*.
 
+**nb**: files are merged alphabetically. To control the merge order take this 
+information into account.
+
+**e.g:**
+
+```
+00_file1.md
+01_anotherFile.md
+02_file.md
+...
+```
+file `2-file.md` would be treated after file `02-file.md` for example.
+
 The **md_merger** will merge all the .md files that are stored in the targeted directory and will gather them into a destination file. After the merge is done, the number of merged files will be displayed in the console.
 
 **md_merger** can process with other format files present in the same directory: it targets the **.md** files.
