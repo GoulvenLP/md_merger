@@ -11,7 +11,9 @@
 
 usage(){
 	echo "Usage ./md_merger [TARGET PATH] [DESTINATION FILE]"
-	echo "if no destination file is specified, the output file will be 'merged.md' "
+	echo ""
+	echo "-h		help: displays the typical usage of the application"
+	echo "DESTINATION FILE	optional. If not specified, the output file will be named 'merged.md' "
 }
 
 
@@ -56,12 +58,19 @@ main() {
 		if [ "${extension}" == ".md" ]; then
 			if [ "${file}" != "${dest}" ]; then #exclude the target file
 				cat ${file} >> ${dest}
-				echo " ">> ${dest} #force a linebreak to avoid troubles 
+				echo " ">> ${dest} # force a linebreak to avoid troubles 
 				((numberOfFiles+=1))
 			fi
 		fi
 	done
-	echo "${numberOfFiles} files merged in the file ${dest}"
+	# no .md file in the directory
+	if [ "$numberOfFiles" == "0" ]; then
+		echo "There is no .md file in this directory"
+		rm ${dest} # remove the empty destination file
+		exit 3
+	else
+		echo "${numberOfFiles} files merged in the file ${dest}"
+	fi
 
 	exit 0
 }
